@@ -30,11 +30,6 @@ class Forum
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Game::class, inversedBy="forum")
-     */
-    private $game;
-
-    /**
      * @ORM\OneToMany(targetEntity=Topic::class, mappedBy="forum")
      */
     private $topic;
@@ -73,17 +68,6 @@ class Forum
         return $this;
     }
 
-    public function getGame(): ?Game
-    {
-        return $this->game;
-    }
-
-    public function setGame(?Game $game): self
-    {
-        $this->game = $game;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Topic[]

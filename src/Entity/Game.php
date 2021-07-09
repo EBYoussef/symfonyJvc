@@ -49,10 +49,7 @@ class Game
      */
     private $pathImg;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Forum::class, mappedBy="game")
-     */
-    private $forum;
+
 
     /**
      * @ORM\ManyToMany(targetEntity=GameCategory::class, inversedBy="games")
@@ -64,9 +61,13 @@ class Game
      */
     private $device;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Forum::class, cascade={"persist", "remove"})
+     */
+    private $forum;
+
     public function __construct()
     {
-        $this->forum = new ArrayCollection();
         $this->gameCategory = new ArrayCollection();
         $this->device = new ArrayCollection();
     }
@@ -148,35 +149,7 @@ class Game
         return $this;
     }
 
-    /**
-     * @return Collection|Forum[]
-     */
-    public function getForum(): Collection
-    {
-        return $this->forum;
-    }
 
-    public function addForum(Forum $forum): self
-    {
-        if (!$this->forum->contains($forum)) {
-            $this->forum[] = $forum;
-            $forum->setGame($this);
-        }
-
-        return $this;
-    }
-
-    public function removeForum(Forum $forum): self
-    {
-        if ($this->forum->removeElement($forum)) {
-            // set the owning side to null (unless already changed)
-            if ($forum->getGame() === $this) {
-                $forum->setGame(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|GameCategory[]
@@ -222,6 +195,18 @@ class Game
     public function removeDevice(Device $device): self
     {
         $this->device->removeElement($device);
+
+        return $this;
+    }
+
+    public function getForum(): ?Forum
+    {
+        return $this->forum;
+    }
+
+    public function setForum(?Forum $forum): self
+    {
+        $this->forum = $forum;
 
         return $this;
     }
